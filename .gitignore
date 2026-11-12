@@ -8,3 +8,6 @@ test-results/
 playwright-report/
 .build-server/
 assets-src/avatar-v2/
+
+.vercel
+.env*
