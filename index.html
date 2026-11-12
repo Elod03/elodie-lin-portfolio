@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#efedeb" />
+    <meta name="description" content="Elodie Lin, développeuse web et étudiante à Efrei. Découvrez ses projets et son parcours." />
+    <title>Elodie Lin — Développeuse web</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      document.documentElement.classList.add('js');
+      /*SOLAR*/
+      try {
+        // Saved choice first. Otherwise night after the sunset in Paris, otherwise the system preference.
+        // Under ?test, ?paris=<ISO date> freezes the clock (captures).
+        const query = new URLSearchParams(location.search);
+        const fixed = query.has('test') && query.get('paris') ? new Date(query.get('paris')) : new Date();
+        let night = false;
+        try { night = parisSolar.isParisNight(fixed); } catch { /* no sun, no problem */ }
+        let stored = null;
+        try { stored = localStorage.getItem('portfolio-theme'); } catch { /* private mode */ }
+        const theme = parisSolar.resolveInitialTheme({ stored, prefersDark: matchMedia('(prefers-color-scheme: dark)').matches, night });
+        document.documentElement.dataset.theme = theme;
+        // Same value as the theme button (App.tsx): the browser bar follows an automatic night too.
+        if (theme === 'night') document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#3e4045');
+      } catch { document.documentElement.dataset.theme = 'day'; }
+    </script>
+    <!--app-head-->
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <noscript>Elodie Lin — Développeuse web, étudiante à Efrei et alternante chez Ody. Contact : <a href="mailto:Linelodie2004@gmail.com">Linelodie2004@gmail.com</a>.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

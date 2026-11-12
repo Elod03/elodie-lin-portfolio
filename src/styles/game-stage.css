@@ -1,0 +1,160 @@
+/* Scène plein écran d'un jeu (GameStage.tsx) : le jeu aussi grand que l'écran le permet, une barre fine pour son nom
+   et son record, les commandes à côté (ordinateur) ou sous le jeu (téléphone), les notes en colonne ou en feuille.
+   Couleurs du jeu en --game-a (claire) et --game-b (profonde). Tout le texte blanc est posé sur la couleur profonde
+   ou sur un aplat plus sombre qu'elle (--stage-fill) : la lumière claire reste en bas, derrière et sous le jeu. */
+.game-stage {
+  --stage-ink: #11304a;
+  --stage-paper: #f7f6f4;
+  --stage-fill: color-mix(in oklab, var(--game-b) 72%, #061624);
+  --stage-fill-hover: color-mix(in oklab, var(--game-b) 56%, #061624);
+  --stage-pad: clamp(16px, 2vw, 28px);
+  position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  border: 0; overflow: hidden; color: #fff;
+  background-color: var(--game-b);
+  background-image: radial-gradient(ellipse 90% 70% at 50% 100%, var(--game-a), var(--game-b));
+  background-image: radial-gradient(in oklab ellipse 90% 70% at 50% 100%, var(--game-a), var(--game-b));
+}
+.game-stage[open] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas: 'bar actions' 'board board' 'help help';
+}
+.game-stage::backdrop { background: rgba(16, 50, 74, .6); }
+.game-stage ::selection { background: #fff; color: var(--stage-ink); }
+
+/* Barre : nom du jeu et record. */
+.game-bar { grid-area: bar; display: flex; align-items: center; gap: var(--s3) var(--s5); min-width: 0; padding: 12px var(--stage-pad); }
+.game-name { display: flex; flex-direction: column; min-width: 0; }
+.game-name small { font: 700 14px/1.3 var(--font-body); }
+.game-name h2 { margin: 0; font: 700 clamp(26px, 2.4vw, 36px)/1.05 var(--font-display); letter-spacing: -.02em; text-wrap: balance; }
+.game-best { flex: none; margin: 0; padding: 8px 16px; border-radius: var(--r-pill); background: var(--stage-fill); font: 700 var(--fs-label)/1.2 var(--font-body); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.game-best[data-played='true'] { background: #FFD43B; color: var(--stage-ink); }
+
+/* Commandes. Recommencer n'est pas mis en avant : c'est la seule action qui efface une partie. */
+.game-actions { grid-area: actions; display: flex; align-items: center; gap: var(--s2); padding: 12px var(--stage-pad) 12px 0; }
+.game-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 46px; min-height: 46px; padding: 0 18px 0 14px; border: 0; border-radius: var(--r-pill); background: var(--stage-fill); color: #fff; font: 800 var(--fs-label)/1 var(--font-body); white-space: nowrap; cursor: pointer; transition: background-color .2s, color .2s; }
+.game-button:hover { background: var(--stage-fill-hover); }
+.game-button[aria-pressed='true'], .game-button[aria-expanded='true'] { background: #fff; color: var(--game-b); }
+.game-icon { flex: none; }
+.game-close { display: grid; place-items: center; flex: none; width: 46px; height: 46px; margin-left: var(--s2); padding: 0; border: 0; border-radius: 50%; background: #fff; color: var(--stage-ink); cursor: pointer; }
+/* Anneau de focus en deux tons : encre contre le bouton, halo blanc contre la couleur du jeu. */
+.game-button:focus-visible, .game-close:focus-visible { outline: 3px solid #fff; outline-offset: 3px; box-shadow: 0 0 0 3px var(--stage-ink); }
+
+/* Le jeu : 16:10, aussi grand que la place restante. */
+.game-board { grid-area: board; min-height: 0; display: grid; place-items: center; padding: 0 var(--stage-pad); container-type: size; }
+.game-screen { width: min(100cqw, 160cqh); aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--r-media); background: var(--game-b); box-shadow: 0 26px 60px rgba(16, 50, 74, .32); }
+.game-screen:has(.experiment-canvas:focus-visible) { outline: 3px solid #fff; outline-offset: 3px; box-shadow: 0 0 0 3px var(--stage-ink), 0 26px 60px rgba(16, 50, 74, .32); }
+.game-screen .experiment-canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.game-screen .experiment-canvas:focus-visible { outline: none; }
+
+/* Commandes du jeu sous l'écran, sur un aplat sombre : lisible même sur la lumière claire du bas. */
+.game-help { grid-area: help; justify-self: center; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 2px 12px; max-width: min(72rem, calc(100% - 2 * var(--stage-pad))); margin: 12px var(--stage-pad); padding: 9px 20px; border-radius: var(--r-surface); background: var(--stage-fill); font-size: var(--fs-small); line-height: 1.4; text-align: center; text-wrap: pretty; }
+.game-help b { font: 800 14px/1.4 var(--font-body); }
+.game-touch { display: none; }
+@media (pointer: coarse) { .game-keys { display: none; } .game-touch { display: inline; } }
+/* La description ne s'ajoute que si l'écran est assez haut pour ne rien prendre au jeu. */
+.game-help-text { display: none; }
+@media (min-width: 1280px) and (min-height: 1050px) { .game-help-text { display: inline; } }
+
+/* Notes « Comment c'est codé » : le jeu est en pause tant qu'elles sont ouvertes. Par défaut, une colonne à côté du jeu,
+   qui rétrécit pour lui laisser la place sans jamais couvrir ses vies ni son score. */
+.game-notes { grid-area: notes; align-self: start; min-height: 0; max-height: 100%; overflow: auto; overscroll-behavior: contain; margin: 0 var(--stage-pad) 12px 0; padding: var(--s5); border-radius: var(--r-media); background: var(--stage-paper); color: var(--stage-ink); box-shadow: 0 24px 50px rgba(16, 50, 74, .3); animation: notes-in .3s cubic-bezier(.16, 1, .3, 1) both; scrollbar-color: color-mix(in oklab, var(--game-b) 60%, transparent) transparent; }
+.game-notes[hidden] { display: none; }
+.game-notes-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s3); }
+.game-notes h3 { margin: 0; font: 700 var(--fs-h3)/1.2 var(--font-display); }
+.game-notes-close { display: grid; place-items: center; flex: none; width: 44px; height: 44px; margin: -10px -10px 0 0; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--stage-ink); cursor: pointer; }
+.game-notes-close:hover { background: color-mix(in oklab, var(--stage-ink) 8%, transparent); }
+.game-notes-close:focus-visible { outline: 3px solid var(--stage-ink); outline-offset: 0; }
+.game-notes p { margin: 0 0 var(--s3); font-size: var(--fs-small); line-height: 1.55; text-wrap: pretty; }
+.game-notes p:last-child { margin-bottom: 0; }
+.game-technique b { display: block; color: color-mix(in oklab, var(--game-b) 82%, var(--stage-ink)); font: 800 14px/1.4 var(--font-body); }
+@keyframes notes-in { from { opacity: 0; translate: 12px 0; } }
+.game-stage[open][data-notes='true'] {
+  grid-template-columns: minmax(0, 1fr) auto clamp(300px, 27vw, 400px);
+  grid-template-areas: 'bar actions actions' 'board board notes' 'help help notes';
+}
+
+/* Entre 768 et 1279 px : boutons en icônes (le nom reste lu par les lecteurs d'écran). */
+@media (max-width: 1279px) {
+  .game-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .game-button { padding: 0; width: 46px; }
+}
+/* Tablette en portrait : les notes passent sous le jeu, qui garde toute la largeur. */
+@media (min-width: 768px) and (max-aspect-ratio: 1/1) {
+  .game-stage[open][data-notes='true'] {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: 'bar actions' 'board board' 'notes notes' 'help help';
+  }
+  .game-notes { max-height: 40dvh; margin: 12px var(--stage-pad) 0; }
+}
+
+/* Téléphone en portrait : nom et record sur une ligne, le jeu sur toute la largeur, les commandes juste dessous,
+   à portée du pouce (et non collées au bas de l'écran). */
+@media (max-width: 767px) {
+  .game-stage { --stage-pad: 12px; }
+  .game-stage[open] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto auto minmax(0, .7fr);
+    grid-template-areas: 'bar' 'board' 'help' 'actions' '.';
+  }
+  .game-stage[open][data-notes='true'] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+    grid-template-areas: 'bar' 'board' 'help' 'actions' 'notes';
+  }
+  .game-bar { justify-content: space-between; gap: var(--s3); padding: 10px var(--stage-pad); }
+  .game-name small { display: none; }
+  .game-name h2 { font-size: 26px; }
+  .game-best { padding: 6px 12px; font-size: 14px; }
+  .game-board { place-items: end center; padding: 0 6px; }
+  .game-screen { border-radius: var(--r-inner); }
+  .game-help { margin: 12px var(--stage-pad) 0; padding: 8px 16px; }
+  .game-actions { justify-content: center; gap: var(--s3); padding: 12px var(--stage-pad); }
+  .game-fullscreen { display: none; }
+  .game-close { margin-left: var(--s4); }
+  /* Les notes montent du bas en feuille, à la place de l'espace libre sous les commandes : le jeu en pause reste
+     entier au-dessus (il ne rétrécit que si le texte est plus haut que cet espace). */
+  .game-notes { align-self: end; max-height: 46dvh; margin: 0; padding: var(--s5) var(--s5) max(var(--s5), env(safe-area-inset-bottom)); border-radius: var(--r-media) var(--r-media) 0 0; box-shadow: 0 -18px 44px rgba(16, 50, 74, .3); animation-name: sheet-in; }
+}
+@keyframes sheet-in { from { translate: 0 40px; opacity: 0; } }
+
+/* Téléphone couché : une colonne d'icônes à gauche, le nom à droite, le jeu sur toute la hauteur. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .game-stage { --stage-pad: 8px; }
+  .game-stage[open] {
+    grid-template-columns: auto minmax(0, 1fr) minmax(0, 150px);
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: 'actions board bar';
+  }
+  .game-stage[open][data-notes='true'] {
+    grid-template-columns: auto minmax(0, 1fr) min(320px, 40vw);
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: 'actions board notes';
+  }
+  .game-stage[data-notes='true'] .game-bar { display: none; }
+  .game-bar { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: var(--s2); padding: 12px 12px 12px 4px; }
+  .game-name small { display: none; }
+  .game-name h2 { font-size: 22px; }
+  .game-best { padding: 6px 10px; font-size: 13px; white-space: normal; }
+  .game-board { place-items: center; padding: var(--stage-pad) 4px; }
+  .game-screen { border-radius: var(--r-inner); }
+  .game-help { display: none; }
+  .game-actions { flex-direction: column; justify-content: flex-start; gap: var(--s2); padding: var(--stage-pad) 4px var(--stage-pad) max(var(--stage-pad), env(safe-area-inset-left)); }
+  .game-fullscreen { display: none; }
+  .game-close { margin: auto 0 0; }
+  .game-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .game-button { padding: 0; width: 46px; }
+  .game-notes { align-self: stretch; max-height: none; margin: var(--stage-pad) var(--stage-pad) var(--stage-pad) 0; padding: var(--s4) var(--s5); border-radius: var(--r-surface); box-shadow: 0 24px 50px rgba(16, 50, 74, .3); animation-name: notes-in; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-notes { animation: none; }
+  .game-button { transition: none; }
+}
+@media (forced-colors: active) {
+  .game-button, .game-close, .game-best, .game-help { border: 1px solid CanvasText; }
+  .game-button:focus-visible, .game-close:focus-visible { outline-color: Highlight; }
+}

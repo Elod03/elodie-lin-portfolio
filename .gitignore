@@ -1,0 +1,10 @@
+node_modules/
+dist/
+reference/
+.env*
+assets-src/photo-*
+.superpowers/
+test-results/
+playwright-report/
+.build-server/
+assets-src/avatar-v2/

@@ -1,0 +1,82 @@
+/* Playground : six jeux colorés. Chaque jeu porte ses deux couleurs (--game-a claire, --game-b profonde) sur sa carte,
+   sur le jeu du jour et sur la scène plein écran. Pas de cadre ni de filet : aplats, dégradés et ombres douces.
+   Lisibilité : la couleur claire ne vit qu'autour de l'affiche ; tout le texte blanc est posé sur la couleur profonde
+   (blanc sur --game-b : 5,1 à 8,8:1). Focus : anneau encre + halo blanc, lisible sur le carrelage comme sur chaque couleur. */
+.playground-page { --play-r: 32px; --play-rim: 10px; --play-inner-r: calc(var(--play-r) - var(--play-rim)); --focus-ink: #10324A; max-width: 1480px; margin-inline: auto; min-height: 100svh; padding: calc(14svh + var(--s6)) var(--gutter) var(--section-gap); color: var(--ink); }
+.playground-hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s7); align-items: start; margin-bottom: var(--s8); }
+/* Le titre s'aligne sur le haut du jeu du jour au lieu de flotter au milieu de la colonne. */
+.playground-intro { padding-top: var(--s2); }
+.playground-intro h1 { margin: 0 0 var(--s5); font-size: var(--fs-display); line-height: 1; }
+.playground-intro p { margin: 0 0 var(--s6); max-width: var(--measure); font-size: var(--fs-body); line-height: 1.6; text-wrap: pretty; }
+.playground-markers { display: flex; flex-wrap: wrap; gap: var(--s2); margin: 0; padding: 0; list-style: none; }
+.playground-markers li { padding: var(--s2) var(--s4); border-radius: var(--r-pill); color: #fff; font: 700 var(--fs-label)/1.2 var(--font-body); }
+/* Teintes plus profondes des mêmes couleurs : blanc 4,8 / 5,0 / 5,9:1. */
+.playground-markers li:nth-child(1) { background: #D62A70; }
+.playground-markers li:nth-child(2) { background: #0A78A0; }
+
+/* Surface commune (jeu du jour + cartes) : fond profond qui fonce un peu vers le bas, et la couleur claire seulement
+   dans le haut, autour de l'affiche (le dégradé atteint --game-b avant le bas de l'affiche, quelle que soit la largeur). */
+.playground-feature, .experiment-card { position: relative; isolation: isolate; padding: var(--play-rim); border-radius: var(--play-r); background: linear-gradient(180deg, var(--game-b) 55%, color-mix(in oklab, var(--game-b) 86%, #000)); color: #fff; }
+.playground-feature::before, .experiment-card::before { content: ''; position: absolute; inset: 0 0 auto; z-index: -1; aspect-ratio: 16 / 10; border-radius: var(--play-r) var(--play-r) 0 0; background: linear-gradient(170deg, var(--game-a) 14%, var(--game-b) 76%); }
+.genre-chip { padding: 3px 12px; border-radius: var(--r-pill); background: color-mix(in oklab, var(--game-b) 76%, #000); color: #fff; font: 700 14px/1.4 var(--font-body); white-space: nowrap; }
+.technique-line { display: flex; align-items: flex-start; gap: var(--s2); color: color-mix(in srgb, #fff 88%, var(--game-a)); font: 500 var(--fs-label)/1.4 var(--font-body); }
+.technique-line svg { flex: none; margin-top: 1px; }
+
+/* Jeu du jour : la carte aux couleurs du jeu, jouable directement */
+.playground-feature { min-width: 0; box-shadow: 0 22px 48px color-mix(in srgb, var(--game-b) 32%, transparent); }
+.feature-frame { position: relative; overflow: hidden; border-radius: var(--play-inner-r); background: var(--game-b); }
+.feature-canvas { display: block; width: 100%; aspect-ratio: 16 / 10; touch-action: pan-y; }
+.feature-canvas:focus-visible { outline: none; }
+.feature-badges { position: absolute; left: var(--s3); bottom: var(--s3); display: flex; flex-wrap: wrap; gap: var(--s2); pointer-events: none; }
+.feature-badge { padding: 3px 12px; border-radius: var(--r-pill); background: #FFD43B; color: var(--focus-ink); font: 800 14px/1.4 var(--font-body); }
+.feature-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s4) var(--s5); padding: var(--s4) var(--s3) var(--s2); }
+.feature-text { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex: 1 1 320px; }
+.feature-text strong { font: 700 clamp(26px, 2.2vw, 34px)/1.1 var(--font-display); letter-spacing: -.02em; }
+.feature-hook { font-size: var(--fs-small); line-height: 1.45; }
+.feature-actions { display: flex; gap: var(--s2); }
+.feature-actions button { min-height: 46px; padding: 10px 22px; border: 0; border-radius: var(--r-pill); background: color-mix(in oklab, var(--game-b) 72%, #000); color: #fff; font: 800 var(--fs-label)/1.2 var(--font-body); cursor: pointer; transition: translate .25s cubic-bezier(.16, 1, .3, 1), background-color .2s; }
+.feature-actions .btn-play { background: #fff; color: var(--game-b); }
+
+/* Cartes : une affiche aux couleurs du jeu, puis titre, accroche, technique et pied */
+.experiment-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); min-width: 0; }
+.experiment-card { display: flex; flex-direction: column; min-width: 0; border: 0; text-align: left; cursor: pointer; box-shadow: 0 16px 34px color-mix(in srgb, var(--game-b) 26%, transparent); transition: translate .4s cubic-bezier(.16, 1, .3, 1), box-shadow .4s; }
+.experiment-art { position: relative; display: block; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--play-inner-r); background: var(--game-b); }
+.experiment-art img, .experiment-art canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; transition: scale .6s cubic-bezier(.16, 1, .3, 1); }
+.experiment-art canvas { pointer-events: none; }
+.experiment-art .genre-chip { position: absolute; z-index: 1; left: var(--s3); bottom: var(--s3); }
+.experiment-body { display: flex; flex: 1; flex-direction: column; gap: var(--s2); padding: var(--s4) var(--s3) var(--s2); }
+.experiment-title { font: 700 clamp(26px, 2.1vw, 32px)/1.05 var(--font-display); letter-spacing: -.02em; }
+.experiment-hook { font-size: var(--fs-small); line-height: 1.45; }
+.experiment-body .technique-line { margin-top: 2px; }
+.experiment-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-top: auto; padding-top: var(--s3); }
+.experiment-best { font: 500 var(--fs-label)/1.2 var(--font-body); font-variant-numeric: tabular-nums; }
+.experiment-best[data-played='true'] { font-weight: 700; }
+.experiment-go { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 16px 0 18px; border-radius: var(--r-pill); background: #fff; color: var(--game-b); font: 800 var(--fs-label)/1 var(--font-body); }
+@media (hover: hover) and (pointer: fine) {
+  .experiment-card:hover { translate: 0 -6px; box-shadow: 0 24px 44px color-mix(in srgb, var(--game-b) 34%, transparent); }
+  .experiment-card:hover .experiment-art img { scale: 1.04; }
+  .feature-actions button:hover { translate: 0 -2px; }
+  .feature-actions .btn-full:hover { background: color-mix(in oklab, var(--game-b) 60%, #000); }
+}
+/* Focus : encre (≥ 4:1 sur les couleurs claires et 11:1 sur le carrelage) + halo blanc (≥ 5:1 sur les couleurs profondes). */
+.experiment-card:focus-visible, .feature-actions button:focus-visible, .feature-frame:has(.feature-canvas:focus-visible) { outline: 3px solid var(--focus-ink); outline-offset: 3px; box-shadow: 0 0 0 3px #fff; }
+
+@media (prefers-reduced-motion: reduce) { .experiment-card, .experiment-art img { transition: none; } }
+
+@media (max-width: 1023px) {
+  .playground-hero { grid-template-columns: minmax(0, 1fr); gap: var(--s6); margin-bottom: var(--s7); }
+  .playground-intro { padding-top: 0; }
+  .experiment-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* Mobile : le jeu du jour, puis un rail natif à deux rangées. */
+@media (max-width: 767px) {
+  .playground-page { --play-r: 28px; --play-rim: 8px; padding-top: 216px; padding-bottom: var(--s8); }
+  .playground-intro h1 { margin-bottom: var(--s4); font-size: var(--fs-h1); }
+  .playground-intro p { margin-bottom: var(--s5); }
+  .feature-bar { padding: var(--s3) var(--s2) var(--s2); }
+  .feature-actions { flex: 1 1 auto; }
+  .experiment-grid { grid-auto-flow: column; grid-template-columns: none; grid-template-rows: repeat(2, auto); grid-auto-columns: 82%; gap: var(--s3); margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); scrollbar-width: none; }
+  .experiment-grid::-webkit-scrollbar { display: none; }
+  .experiment-card { scroll-snap-align: start; }
+  .experiment-body { gap: 6px; padding: var(--s3) var(--s2) var(--s1); }
+}

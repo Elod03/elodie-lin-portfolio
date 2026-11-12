@@ -1,0 +1,291 @@
+/*
+  À propos. Sur ordinateur : une bande horizontale native, courte :
+  portrait | identité et actions | expérience d'un seul regard (Ody + 4 cartes) | formation, compétences, langues et atouts.
+  Une seule idée, l'eau : le nom est rempli de la lumière de l'eau, Ody est une carte-bassin, la lumière suit la souris
+  sur les cartes, et défiler laisse un sillage dans la bande du bas. Les langues ne sont plus mises en avant (Elodie, 09/11).
+  Aucun cadre ni filet : fonds teintés et ombres. Cotes en --u (1/1440 de la largeur). Sur mobile : une colonne.
+*/
+.about-page {
+  --u: calc(100vw / 1440);
+  --band: calc(min(140px, max(100px, 15svh)) + 12px);
+  --top: max(88px, 10svh);
+  --card: var(--ivory);
+  --soft: 0 14px 34px color-mix(in srgb, #0a3a66 11%, transparent);
+  --blue: #1668b0;
+  --pool-a: #09518f;
+  --pool-b: #1476c4;
+  --caustic: url('/media/caustic-tile.webp');
+  --wave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='14' viewBox='0 0 240 14'%3E%3Cpath d='M0 7C40 0 80 0 120 7s80 7 120 0v7H0z' fill='%231f86d6'/%3E%3C/svg%3E");
+  --name-a: #0a4f8f; --name-b: #1476c4; --name-veil: rgba(9, 81, 143, .42);
+  --from: 56px 0;
+  position: relative; box-sizing: border-box; color: var(--ink); font-size: 18px; line-height: 1.55; outline: none;
+}
+html[data-theme='night'] .about-page { --blue: #8fd3ff; --soft: 0 14px 34px rgba(0, 0, 0, .28); --name-a: #cfeeff; --name-b: #8fd3ff; --name-veil: rgba(143, 211, 255, .18); }
+.about-page:focus-visible { outline: 2px solid var(--ink); outline-offset: -6px; border-radius: 12px; }
+.about-track { display: flex; }
+.about-page h1, .about-page h2, .about-page h3, .about-page p, .about-page ul, .about-page figure { margin: 0; padding: 0; }
+.about-page ul { list-style: none; }
+.about-page a { color: inherit; text-decoration: none; }
+.about-title { font: 500 clamp(30px, 2.9vw, 44px)/1.1 'Funnel Display', 'Noto Sans SC', system-ui, sans-serif; letter-spacing: -.025em; }
+
+/* Portrait : la photo d'origine, fond blanc, sans décor */
+.about-me { position: relative; }
+.about-photo { position: relative; height: 100%; overflow: hidden; border-radius: 36px; background: #fefefe; box-shadow: var(--soft); }
+.about-photo img { position: relative; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 8%; }
+.about-chibi { position: absolute; z-index: 2; right: calc(-74 * var(--u)); bottom: -2px; width: calc(144 * var(--u)); height: auto; pointer-events: none; filter: drop-shadow(0 10px 14px color-mix(in srgb, #0a3a66 22%, transparent)); }
+
+/* Identité */
+.about-eyebrow { display: flex; align-items: center; gap: 6px; font-size: 16px; font-weight: 600; color: var(--blue); margin-bottom: 4px !important; }
+.about-intro h1 { overflow: hidden; padding-bottom: .12em; margin-bottom: 2px; font: 600 clamp(54px, min(6.6vw, 13svh), 124px)/1 'Funnel Display', 'Noto Sans SC', system-ui, sans-serif; letter-spacing: -.045em; }
+.about-name { display: block; color: var(--name-a); }
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .about-name { background: linear-gradient(var(--name-veil), var(--name-veil)), var(--caustic) 0 0 / 300px, linear-gradient(100deg, var(--name-a), var(--name-b)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+}
+.about-intro h2 { font: 400 clamp(20px, 1.7vw, 26px)/1.3 'Zen Maru Gothic', 'Noto Sans SC', system-ui, sans-serif; letter-spacing: -.005em; }
+.about-bio { font-size: clamp(17px, 1.25vw, 19px); line-height: 1.55; }
+.about-bio + .about-bio { margin-top: 10px !important; }
+
+/* Pastilles */
+.about-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.about-pills li { padding: 7px 15px; border-radius: 999px; background: var(--card); font-size: 16px; font-weight: 600; line-height: 1.3; }
+.about-pills-main li { background: color-mix(in srgb, var(--blue) 14%, var(--card)); }
+.about-page .about-mini { margin-bottom: 10px; font: 600 16px/1.2 'Zen Maru Gothic', 'Noto Sans SC', system-ui, sans-serif; color: var(--ink-soft); }
+
+/* Actions : l'eau monte dans le bouton au survol */
+.about-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.about-fill { position: relative; overflow: hidden; display: inline-flex; align-items: center; min-height: 54px; padding: 0 24px; border: 0; border-radius: 999px; font: 600 17px/1 var(--font-body); cursor: pointer; isolation: isolate; }
+.about-fill > span { display: inline-flex; align-items: center; gap: 10px; }
+.about-fill svg { width: 21px; height: 21px; }
+.about-fill::before { content: ''; position: absolute; z-index: -1; inset: 0; background: var(--wave) 0 0 / 240px 14px repeat-x, linear-gradient(transparent 12px, #1f86d6 12px); transform: translateY(102%); transition: transform .55s cubic-bezier(.16, 1, .3, 1); }
+.about-page .about-cv { background: var(--pool-a); color: #fff; box-shadow: 0 12px 26px color-mix(in srgb, var(--pool-a) 34%, transparent); }
+.about-contact-button { background: var(--card); color: var(--ink); transition: color .25s; }
+.about-round { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: var(--card); transition: translate .3s cubic-bezier(.16, 1, .3, 1); }
+.about-page .about-round { color: var(--blue); }
+.about-round svg { width: 23px; height: 23px; }
+.about-round b { font: 700 20px/1 system-ui, sans-serif; letter-spacing: -.05em; }
+
+/* Expérience : tout d'un seul regard */
+.about-experience { display: flex; flex-direction: column; gap: 14px; }
+/* Ody à gauche ; à droite deux colonnes de deux cartes, chacune partagée selon son contenu
+   (Shanghai a la ville en plus : 55 % de sa colonne). Lignes en quarantièmes, l'écart vient des marges. */
+.about-xp { --gap: 14px; flex: 1; min-height: 0; display: grid; grid-template-columns: calc(380 * var(--u)) repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(40, minmax(0, 1fr)); gap: 0 var(--gap); }
+.about-xp > :nth-child(2) { grid-area: 1 / 2 / 23; margin-bottom: calc(var(--gap) / 2); }
+.about-xp > :nth-child(3) { grid-area: 1 / 3 / 21; margin-bottom: calc(var(--gap) / 2); }
+.about-xp > :nth-child(4) { grid-area: 23 / 2 / 41; margin-top: calc(var(--gap) / 2); }
+.about-xp > :nth-child(5) { grid-area: 21 / 3 / 41; margin-top: calc(var(--gap) / 2); }
+.about-xp-card { position: relative; overflow: hidden; isolation: isolate; min-width: 0; padding: 14px 18px; border-radius: 28px; background: var(--card); box-shadow: var(--soft); transition: translate .45s cubic-bezier(.16, 1, .3, 1); }
+.about-xp-head { display: flex; align-items: center; gap: 12px; }
+.about-logo { flex: none; display: grid; place-items: center; width: 46px; height: 46px; overflow: hidden; border-radius: 13px; background: color-mix(in srgb, var(--ink) 8%, var(--card)); font: 700 16px/1 'Funnel Display', system-ui, sans-serif; color: var(--ink-soft); }
+.about-logo img { display: block; width: 100%; height: 100%; object-fit: contain; padding: 5px; }
+.about-logo:has(img) { background: #fff; }
+.about-logo[data-tile="dark"] { background: #2b1f1a; }
+.about-logo[data-tile="dark"] img { padding: 0; }
+.about-row-copy { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.about-row-copy strong { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 19px; line-height: 1.2; font-weight: 700; }
+.about-row-copy > span { font-size: 15px; line-height: 1.35; color: var(--ink-soft); }
+.about-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 12px; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--blue); }
+.about-place { display: inline-flex; align-items: center; gap: 4px; }
+.about-page .about-role { font-size: 16px; line-height: 1.3; font-weight: 600; margin-top: 10px; }
+.about-points { display: grid; gap: 8px; }
+.about-points li { position: relative; padding-left: 16px; font-size: clamp(15px, 2.05svh, 18px); line-height: 1.36; }
+.about-points li::before { content: ''; position: absolute; left: 0; top: .52em; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); }
+.about-xp-card[data-kind='small'] .about-meta { margin-top: 2px; }
+.about-page .about-xp-card[data-kind='small'] .about-points { margin-top: 8px; gap: clamp(3px, .7svh, 10px); }
+.about-xp-card[data-kind='small'] .about-points li { font-size: clamp(15px, 1.7svh, 17px); line-height: 1.32; }
+
+/* Ody : la carte-bassin */
+.about-xp-card[data-kind='hero'] { grid-row: 1 / -1; display: flex; flex-direction: column; padding: 28px; color: #fff; background: linear-gradient(170deg, var(--pool-b), var(--pool-a)); box-shadow: 0 18px 42px color-mix(in srgb, var(--pool-a) 34%, transparent); }
+.about-xp-card[data-kind='hero']::before { --tile: 420px; content: ''; position: absolute; z-index: -1; inset: -420px 0 0 -420px; background: var(--caustic) 0 0 / 420px; opacity: .22; }
+.about-xp-card[data-kind='hero'] .about-logo { width: 60px; height: 60px; border-radius: 16px; }
+.about-xp-card[data-kind='hero'] .about-row-copy strong { font: 600 clamp(36px, 3.2vw, 50px)/1 'Funnel Display', system-ui, sans-serif; letter-spacing: -.03em; }
+.about-xp-card[data-kind='hero'] .about-row-copy > span { font-size: 16px; margin-top: 4px; color: #fff; }
+.about-xp-card[data-kind='hero'] .about-meta { margin-top: 14px; color: #fff; }
+.about-page .about-xp-card[data-kind='hero'] .about-points { flex: 1; align-content: space-evenly; margin-top: 8px; padding-top: 6px; gap: 6px; }
+.about-xp-card[data-kind='hero'] .about-points li { font-size: clamp(15px, 2svh, 18px); line-height: 1.36; }
+.about-xp-card[data-kind='hero'] .about-points li::before { background: #9fe0ff; }
+
+/* Shanghai : la ville en grand */
+.about-xp-card[data-kind='feature'] { display: flex; flex-direction: column; }
+.about-city-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 14px; }
+.about-feature-side { display: flex; flex-direction: column; min-width: 0; }
+.about-page .about-city { font: 600 clamp(32px, min(3.2vw, 6svh), 54px)/1.02 'Funnel Display', 'Noto Sans SC', system-ui, sans-serif; letter-spacing: -.04em; margin: 4px 0 0; padding-bottom: .06em; color: var(--name-b); }
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .about-city { background: linear-gradient(var(--name-veil), var(--name-veil)), var(--caustic) 0 0 / 260px, linear-gradient(100deg, var(--name-a), var(--name-b)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+}
+.about-page .about-xp-card[data-kind='feature'] .about-points { margin-top: 8px; gap: clamp(3px, .7svh, 10px); }
+.about-xp-card[data-kind='feature'] .about-points li { font-size: clamp(15px, 1.7svh, 17px); line-height: 1.32; }
+.about-badge { padding: 1px 10px; border-radius: 999px; background: var(--pool-a); color: #fff; font: 700 15px/1.45 'Zen Maru Gothic', system-ui, sans-serif; font-style: normal; }
+
+/* La lumière de l'eau suit la souris */
+[data-spot]::after { content: ''; position: absolute; z-index: -1; inset: 0; pointer-events: none; opacity: 0; background: var(--water); -webkit-mask-image: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), #000, transparent), var(--caustic); mask-image: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), #000, transparent), var(--caustic); -webkit-mask-size: 100% 100%, 320px 320px; mask-size: 100% 100%, 320px 320px; -webkit-mask-composite: source-in; mask-composite: intersect; transition: opacity .35s; }
+[data-kind='hero'][data-spot]::after { background: #fff; }
+
+/* Formation, compétences, atouts : une colonne dense */
+/* Tailles liées à la hauteur d'écran : la colonne se remplit sur un grand écran et tient sur un portable. */
+.about-more { display: flex; flex-direction: column; gap: clamp(6px, 1.3svh, 20px); }
+.about-more .about-mini { margin-bottom: clamp(4px, .9svh, 10px); }
+.about-more > .about-title:not(:first-child) { margin-top: auto; padding-top: clamp(2px, 1svh, 14px); }
+.about-rows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.about-row { position: relative; overflow: hidden; isolation: isolate; display: flex; align-items: center; gap: 10px; padding: clamp(4px, 1svh, 16px) 12px clamp(4px, 1svh, 16px) 10px; border-radius: 20px; background: var(--card); transition: translate .45s cubic-bezier(.16, 1, .3, 1); }
+.about-row .about-logo { width: clamp(32px, 4.8svh, 52px); height: clamp(32px, 4.8svh, 52px); border-radius: 11px; }
+.about-row .about-row-copy strong { font-size: clamp(16px, 1.9svh, 20px); gap: 2px 8px; }
+.about-row .about-row-copy > span { font-size: clamp(15px, 1.7svh, 18px); line-height: 1.25; }
+.about-row-year { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--blue); white-space: nowrap; }
+.skill-list { display: flex; flex-wrap: wrap; gap: clamp(5px, 1svh, 12px); }
+.skill-list li { display: flex; align-items: center; gap: 8px; padding: clamp(3px, .5svh, 6px) 14px clamp(3px, .5svh, 6px) clamp(3px, .5svh, 6px); border-radius: 16px; background: var(--card); }
+.skill-mark { position: relative; display: grid; place-items: center; width: clamp(30px, 4.4svh, 48px); height: clamp(30px, 4.4svh, 48px); border-radius: 11px; background: linear-gradient(145deg, var(--card), color-mix(in srgb, var(--skill-color) 15%, var(--card))); box-shadow: 0 8px 16px color-mix(in srgb, #0a3a66 12%, transparent), inset 0 1px 0 rgba(255, 255, 255, .7); transition: translate .4s cubic-bezier(.16, 1, .3, 1); }
+html[data-theme='night'] .skill-mark { background: #f2f5f7; box-shadow: 0 8px 16px rgba(0, 0, 0, .25); }
+.skill-mark::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 0 0 2px var(--water); opacity: 0; pointer-events: none; }
+.skill-name { font-size: clamp(15px, 1.75svh, 19px); font-weight: 600; line-height: 1.2; white-space: nowrap; }
+.about-traits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(8px, 1.6svh, 20px) 16px; margin-top: auto; }
+.about-traits .about-pills { gap: 6px; }
+.about-traits .about-pills li { padding: clamp(3px, .6svh, 8px) clamp(10px, 1.2svh, 15px); font-size: clamp(15px, 1.7svh, 18px); }
+.about-traits > .about-languages { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.about-more .about-languages .about-mini { margin-bottom: 0; }
+.about-languages li b { margin-left: 6px; color: var(--blue); }
+.about-credits { font-size: 15px; line-height: 1.35; color: var(--ink-soft); }
+
+/* Flèche posée sur l'eau, l'anneau montre la progression */
+.about-hint { display: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  .about-xp-card:hover { translate: 0 -5px; }
+  .about-row:hover { translate: 6px 0; }
+  [data-spot]:hover::after { opacity: .5; }
+  [data-kind='hero'][data-spot]:hover::after { opacity: .42; }
+  .about-fill:hover::before { transform: translateY(0); }
+  .about-contact-button:hover { color: #fff; }
+  .about-round:hover { translate: 0 -3px; }
+  .skill-list li:hover .skill-mark { translate: 0 -5px; }
+  .skill-list li:hover .skill-mark::after { animation: about-ripple .8s cubic-bezier(.16, 1, .3, 1); }
+}
+.about-fill:focus-visible, .about-round:focus-visible, .about-hint:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+/* ---------- Mouvement ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* Le bassin apparaît, elle sort de l'eau, puis les textes montent. Ce qui est hors écran attend d'être atteint (data-wait). */
+  .about-photo { animation: about-basin 1.1s cubic-bezier(.16, 1, .3, 1) .35s both; }
+  .about-photo img { animation: about-emerge 1.5s cubic-bezier(.16, 1, .3, 1) .55s both; }
+  .about-chibi { animation: about-in .9s cubic-bezier(.16, 1, .3, 1) 1.5s both; }
+  .about-name { animation: about-line 1.15s cubic-bezier(.16, 1, .3, 1) .7s both; }
+  .about-page [data-cascade] { animation: about-in .8s cubic-bezier(.16, 1, .3, 1) both; animation-delay: calc(620ms + var(--i, 0) * 55ms); }
+
+  .about-page [data-reveal] { animation: about-in .95s cubic-bezier(.16, 1, .3, 1) both; animation-delay: calc(900ms + var(--i, 0) * 70ms); }
+  .about-page [data-reveal][data-wait]:not([data-seen]) { animation-play-state: paused; }
+  .about-page [data-reveal][data-wait][data-seen] { animation-delay: calc(var(--i, 0) * 70ms); }
+
+  /* L'eau bouge, seulement à l'écran */
+  .about-xp-card[data-kind='hero']::before { animation: about-drift 30s linear infinite paused; }
+  .about-xp-card[data-kind='hero'][data-live]::before { animation-play-state: running; }
+}
+@keyframes about-in { from { opacity: 0; translate: var(--from); } to { opacity: 1; translate: 0 0; } }
+@keyframes about-line { from { opacity: 0; transform: translateY(105%); } to { opacity: 1; transform: none; } }
+@keyframes about-basin { from { clip-path: inset(100% 0 0 0 round 36px); } to { clip-path: inset(0 0 0 0 round 36px); } }
+@keyframes about-emerge { from { transform: scale(1.08); } to { transform: none; } }
+/* Moved with transform, not background-position: no repaint each frame next to the WebGL pool. */
+@keyframes about-drift { to { transform: translate(var(--tile), var(--tile)); } }
+@keyframes about-hint-in { from { opacity: 0; } }
+/* The arrow of the pill leans right a few times, then rests. */
+@keyframes about-hint-lean { 0%, 60%, 100% { translate: 0 0; } 30% { translate: 6px 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .about-hint:not([data-moved]) svg { animation: about-hint-lean 1.4s cubic-bezier(.45, 0, .55, 1) 2.2s 5; }
+}
+@keyframes about-ripple { from { opacity: .85; transform: scale(1); } to { opacity: 0; transform: scale(1.5); } }
+@media (prefers-reduced-motion: reduce) {
+  .about-page *, .about-page *::before, .about-page *::after { transition: none !important; }
+  .about-xp-card:hover, .about-row:hover, .about-round:hover, .skill-list li:hover .skill-mark { translate: none; }
+}
+
+/* ---------- Ordinateur : bande horizontale ---------- */
+@media (min-width: 768px) {
+  .about-page {
+    height: 100svh; overflow: auto; scrollbar-width: none; overscroll-behavior-x: contain;
+    padding: var(--top) 0 calc(var(--band) + 28px) calc(72 * var(--u));
+  }
+  .about-page::-webkit-scrollbar { display: none; }
+  .about-track { box-sizing: border-box; width: max-content; height: 100%; min-height: 470px; padding-right: calc(56 * var(--u)); align-items: stretch; }
+  .about-track > * { flex: none; min-width: 0; }
+  .about-me { width: calc(320 * var(--u)); }
+  .about-intro { width: calc(540 * var(--u)); margin-left: calc(44 * var(--u)); display: flex; flex-direction: column; justify-content: space-between; gap: 14px; }
+  .about-experience { width: calc(1040 * var(--u)); margin-left: calc(56 * var(--u)); }
+  .about-more { width: clamp(540px, calc(600 * var(--u)), 700px); margin-left: calc(40 * var(--u)); }
+  .about-credits { display: none; }
+  /* Until the band has been moved: a white pill that says it in words. Afterwards: a ring that fills with the progress. */
+  /* The band can be grabbed: an open hand says so, a closed one while it is pulled. */
+  .about-page { cursor: grab; }
+  .about-page[data-dragging] { cursor: grabbing; user-select: none; }
+  .about-page[data-dragging] * { cursor: grabbing !important; }
+  .about-hint { position: fixed; z-index: 4; right: calc(4.7vw + 24px); bottom: calc(12px + min(140px, max(100px, 15svh)) / 2 - 27px); display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 54px; height: 54px; padding: 0; border: 0; border-radius: 999px; background: conic-gradient(#fff calc(var(--p, 0) * 1turn), rgba(255, 255, 255, .34) 0); color: #09518f; cursor: pointer; box-shadow: 0 10px 26px -12px rgba(4, 40, 80, .55); transition: opacity .3s, scale .25s, padding .45s cubic-bezier(.16, 1, .3, 1); animation: about-hint-in .6s ease 1.5s both; }
+  .about-hint::before { content: ''; position: absolute; inset: 4px; border-radius: inherit; background: #f7f6f4; transition: inset .45s; }
+  .about-hint svg, .about-hint-label { position: relative; }
+  .about-hint-label { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 16px; font-weight: 700; letter-spacing: .01em; opacity: 0; transition: max-width .45s cubic-bezier(.16, 1, .3, 1), opacity .25s; }
+  .about-hint:not([data-moved]) { padding: 0 18px 0 22px; background: #fff; }
+  .about-hint:not([data-moved])::before { inset: 0; background: #fff; }
+  .about-hint:not([data-moved]) .about-hint-label { max-width: 9em; opacity: 1; }
+  .about-hint[data-moved] { gap: 0; }
+  .about-hint[data-edge='end'], .about-hint[data-edge='none'] { opacity: 0 !important; animation: none; pointer-events: none; }
+  .about-hint:hover { scale: 1.08; }
+}
+/* Écran bas (la plupart des portables) : tout se resserre, sans allonger la bande */
+@media (min-width: 768px) and (max-height: 880px) {
+  .about-page { padding-bottom: calc(var(--band) + 14px); }
+  .about-intro { width: calc(540 * var(--u)); gap: 8px; }
+  .about-experience { margin-left: calc(40 * var(--u)); }
+  .about-intro h1 { font-size: clamp(52px, min(6vw, 12svh), 104px); }
+  .about-eyebrow { margin-bottom: 0 !important; }
+  .about-intro h2 { font-size: clamp(18px, 1.5vw, 22px); }
+  .about-pills li { padding: 5px 13px; font-size: 15px; }
+  .about-bio { font-size: 16px; line-height: 1.42; }
+  .about-bio + .about-bio { margin-top: 5px !important; }
+  .about-fill { min-height: 48px; padding: 0 20px; font-size: 16px; }
+  .about-round { width: 48px; height: 48px; }
+  .about-title { font-size: 28px; }
+  .about-experience { gap: 8px; }
+  .about-experience { width: calc(1180 * var(--u)); }
+  .about-xp { --gap: 10px; grid-template-columns: calc(420 * var(--u)) repeat(2, minmax(0, 1fr)); }
+  .about-xp-card { padding: 10px 16px; border-radius: 24px; }
+  .about-xp-card[data-kind='hero'] { padding: 16px 22px; }
+  .about-xp-card[data-kind='hero'] .about-logo { width: 50px; height: 50px; }
+  .about-xp-card[data-kind='hero'] .about-row-copy strong { font-size: clamp(32px, 2.7vw, 42px); }
+  .about-xp-card[data-kind='hero'] .about-meta { margin-top: 8px; }
+  .about-page .about-city { margin: 0; font-size: clamp(28px, 5svh, 42px); }
+  .about-logo { width: 40px; height: 40px; }
+  .about-row-copy strong { font-size: 18px; }
+  .about-page .about-role { font-size: 15px; margin-top: 4px; }
+  .about-page .about-xp-card[data-kind='small'] .about-points { margin-top: 4px; }
+  .about-more { width: clamp(580px, calc(640 * var(--u)), 700px); }
+  .about-page .about-mini { font-size: 15px; }
+  .about-credits { display: none; }
+}
+
+/* Écran haut (1920×1080…) : les cartes d'expérience ont de la place, le texte grandit pour ne pas laisser de vide */
+@media (min-width: 768px) and (min-height: 960px) {
+  .about-page .about-xp-card:is([data-kind='small'], [data-kind='feature']) .about-points { margin-top: clamp(8px, 1.3svh, 18px); gap: clamp(6px, 1.1svh, 14px); }
+  .about-xp-card:is([data-kind='small'], [data-kind='feature']) .about-points li { font-size: clamp(17px, 1.75svh, 20px); line-height: 1.36; }
+}
+
+/* ---------- Mobile : une colonne ---------- */
+@media (max-width: 767px) {
+  .about-page { --from: 0 26px; padding: 216px 16px 64px; font-size: 18px; }
+  .about-track { flex-direction: column; gap: 44px; }
+  .about-me { width: min(100%, 320px); aspect-ratio: 4/5; margin: 0 auto; }
+  .about-chibi { right: -14px; width: 92px; }
+  .about-intro h1 { font-size: clamp(56px, 18vw, 76px); }
+  .about-intro h2 { font-size: 21px; }
+  .about-pills-main, .about-biography, .about-actions { margin-top: 18px !important; }
+  .about-bio { font-size: 18px; }
+  .about-cv, .about-contact-button { flex: 1 1 100%; justify-content: center; }
+  .about-round { width: 48px; height: 48px; }
+  .about-title { font-size: 36px; }
+  .about-rows { grid-template-columns: 1fr; }
+  .about-more { gap: 16px; }
+  .about-more > .about-title:not(:first-child) { margin-top: 28px; padding-top: 0; }
+  .about-xp-card[data-kind='hero'] .about-points li, .about-xp-card[data-kind='feature'] .about-points li { font-size: 17px; }
+  .about-xp { display: flex; flex-direction: column; gap: 14px; }
+  .about-xp > * { margin: 0 !important; }
+  .about-page .about-xp-card[data-kind='hero'] .about-points { margin-top: 0; }
+  .about-xp-card[data-kind='feature'] { grid-template-columns: 1fr; gap: 14px; }
+  .about-page .about-city { font-size: 58px; }
+  .about-points li { font-size: 17px; }
+  .about-traits { grid-template-columns: 1fr; margin-top: 12px; }
+}

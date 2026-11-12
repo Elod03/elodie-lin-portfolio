@@ -1,0 +1,147 @@
+/* ---- Galerie des projets (design-direction §4.4) : rangées texte | image, à plat ---- */
+.projects-page { padding: 120px calc(14vw + var(--s6)) var(--s9) var(--gutter); color: var(--ink); }
+.projects-heading,.project-rows { max-width: 84rem; }
+.projects-heading { margin-bottom: var(--s8); }
+.projects-heading h1 { margin: 0 0 var(--s4); font: 700 var(--fs-display)/1 var(--font-display); letter-spacing: -.04em; text-wrap: balance; }
+.projects-heading p { max-width: 40ch; margin: 0; font-size: var(--fs-body); text-wrap: pretty; }
+.project-rows { display: grid; gap: var(--s8); }
+.project-row { position: relative; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s7); align-items: center; }
+.project-visual { aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--r-media); background: var(--ivory); box-shadow: var(--shadow-1); }
+.project-visual img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; transition: object-position 10s cubic-bezier(.22, .45, .35, 1); }
+@media (hover: hover) { .project-row:hover .project-scroll img { object-position: 50% 100%; } }
+.project-text { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s3); min-width: 0; }
+.project-icon { width: 40px; height: 40px; border-radius: 24%; object-fit: cover; }
+.project-text h2 { margin: 0; font: 700 var(--fs-h3)/1.25 var(--font-body); }
+.project-text p { margin: 0; max-width: var(--measure); text-wrap: pretty; }
+.project-link { color: inherit; text-decoration: none; }
+/* Lien étiré : toute la rangée est cliquable ; « Voir le site » passe au-dessus. */
+.project-link::after { content: ''; position: absolute; inset: 0; border-radius: var(--r-media); }
+.project-link:focus-visible { outline: none; }
+.project-row:has(.project-link:focus-visible) { outline: 3px solid var(--deep); outline-offset: 12px; border-radius: var(--r-media); }
+.project-chips { display: flex; flex-wrap: wrap; gap: var(--s2); margin: var(--s1) 0 var(--s2); padding: 0; list-style: none; }
+.project-chips li,.case-chips li { padding: var(--s1) var(--s3); border-radius: var(--r-pill); background: color-mix(in srgb, var(--ink) 8%, var(--tile)); font: 700 var(--fs-label)/1.4 var(--font-body); }
+.project-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s5); }
+.project-row:hover .project-actions .btn-solid { background: var(--deep); color: var(--on-deep); }
+.project-visit { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; font: 700 var(--fs-label)/1.2 var(--font-body); color: var(--deep); text-underline-offset: 4px; }
+.project-visit:hover { text-decoration: underline; }
+.projects-end { margin: var(--s8) 0 0; font-size: var(--fs-small); }
+.projects-end a { display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; color: var(--ink-soft); text-underline-offset: 4px; }
+.projects-end a:hover { color: var(--deep); text-decoration: underline; }
+@media (max-width: 1100px) { .project-row { grid-template-columns: 1fr; gap: var(--s5); } .project-text { max-width: 640px; } }
+@media (max-width: 767px) {
+  /* Sous l'en-tête (64 px) et la bande d'eau (120 px) + 32 px d'air. */
+  .projects-page { padding: 216px var(--gutter) var(--section-gap); }
+  .projects-heading { margin-bottom: var(--s7); }
+  .project-rows { gap: var(--s7); }
+  .project-actions { gap: var(--s4); }
+}
+
+/* ---- Aperçus au survol (peek-card, moteur) ---- */
+.peek-card .peek-visual { --preview-height: 142px; display: block; position: relative; height: var(--preview-height); overflow: hidden; padding: 0; border-radius: 4px; }
+.peek-card .peek-visual img { display: block; width: 100%; height: 142px; object-fit: cover; }
+/* Aperçu vivant : le vrai site (capture longue) défile doucement, une seule boucle aller-retour pendant le survol ; la carte disparaît à la sortie. */
+.peek-card .peek-visual.peek-scroll img { height: auto; min-height: 100%; will-change: transform; animation: peek-scroll 11s .5s ease-in-out 1 both; }
+.peek-card .peek-caption { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.peek-card .peek-caption strong { font-size: 14px; }.peek-card .peek-caption span { font-size: 12px; }
+@keyframes peek-scroll { 0%, 4% { transform: translateY(0); } 50% { transform: translateY(calc(-100% + var(--preview-height))); } 54% { transform: translateY(calc(-100% + var(--preview-height))); } 100% { transform: translateY(0); } }
+.peek-card.peek-about,.peek-card.peek-play { width: 290px; height: 222px; border-radius: 14px; background: #f7f4ee; }
+.peek-card.peek-play { width: 270px; height: 200px; }
+.peek-card.peek-about .peek-visual { --preview-height: 168px; border-radius: 9px; }
+.peek-card.peek-about .peek-visual img { height: 168px; object-position: 50% 22%; }
+.peek-card.peek-play .peek-visual { --preview-height: 146px; border-radius: 9px; }
+.peek-card .peek-montage { display: grid; grid-template-columns: 1.4fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; }
+.peek-card .peek-montage img { height: 100%; }
+.peek-card .peek-montage img:first-child { grid-row: 1 / 3; }
+.peek-card .peek-kind { font-size: 10px; letter-spacing: .12em; color: #6c747a; font-variant-caps: all-small-caps; }
+@media(prefers-reduced-motion:reduce) { .peek-card .peek-visual.peek-scroll img { animation: none; } }
+
+/* ---- Étude de cas (design-direction §4.5) ---- */
+.case-page { --project-tint: var(--project); padding: 112px calc(14vw + var(--s6)) var(--s9) max(15vw, 168px); color: var(--ink); }
+html[data-theme='night'] .case-page { --project-tint: color-mix(in srgb, var(--project) 58%, var(--ink)); }
+.case-page .case-body { max-width: 1040px; }
+.case-back { display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; margin-bottom: var(--s3); font: 700 var(--fs-label)/1.2 var(--font-body); color: var(--ink); text-decoration: none; }
+.case-back:hover { color: var(--deep); }
+.case-hero-frame { overflow: hidden; border-radius: var(--r-media); background: var(--ivory); box-shadow: var(--shadow-1); }
+.case-page .case-hero { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; object-position: 50% 10%; }
+.case-title { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--s6); align-items: start; margin: var(--s7) 0 0; }
+.case-icon { width: 96px; height: 96px; border-radius: 24%; object-fit: cover; box-shadow: var(--shadow-1); }
+.case-heading { min-width: 0; }
+.case-page h1 { margin: 0; font: 700 var(--fs-display)/1 var(--font-display); letter-spacing: -.04em; text-wrap: balance; }
+.case-tagline { margin: var(--s3) 0 0; max-width: 40ch; font-size: clamp(19px, calc(16.4px + .66vw), 21px); line-height: 1.45; color: var(--ink-soft); text-wrap: pretty; }
+.case-actions { grid-column: 2; display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s5); }
+.case-actions a { display: inline-flex; align-items: center; justify-content: center; gap: var(--s2); min-height: 48px; padding: 0 var(--s5); border-radius: var(--r-pill); font: 700 var(--fs-label)/1.2 var(--font-body); text-decoration: none; transition: background-color .2s; }
+.case-primary { background: var(--project-ink); color: #fff; }
+.case-primary:hover { background: color-mix(in srgb, var(--project-ink) 84%, #000); }
+.case-secondary { background: var(--ivory); color: var(--ink); }
+.case-secondary:hover { background: color-mix(in srgb, var(--ink) 8%, var(--ivory)); }
+/* Panneau d'infos unique : une liste, quatre colonnes. */
+.case-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s5); margin: var(--s7) 0 0; padding: var(--s5) var(--s6); border-radius: var(--r-surface); background: var(--ivory); }
+.case-facts > div { min-width: 0; }
+.case-facts .fact-icon { display: block; color: var(--project-tint); }
+.case-facts dt { margin: var(--s2) 0 0; font: 700 var(--fs-label)/1.2 var(--font-body); color: var(--ink-soft); }
+.case-facts dd { margin: var(--s1) 0 0; font: 500 var(--fs-small)/1.45 var(--font-body); overflow-wrap: anywhere; }
+.case-chips { display: flex; flex-wrap: wrap; gap: var(--s2); margin: var(--s1) 0 0; padding: 0; list-style: none; }
+.case-chips li { background: color-mix(in srgb, var(--ink) 8%, var(--ivory)); }
+.case-challenge { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s7); margin-top: var(--s7); }
+.case-challenge h3,.process-list h3 { margin: 0 0 var(--s2); font: 700 var(--fs-h3)/1.25 var(--font-body); }
+.case-challenge p,.case-copy p,.process-list p { margin: 0; max-width: var(--measure); text-wrap: pretty; }
+.case-section { margin-top: var(--section-gap); scroll-margin-top: 96px; }
+.case-section h2 { margin: 0 0 var(--s4); font: 700 var(--fs-h2)/1.1 var(--font-display); letter-spacing: -.03em; text-wrap: balance; }
+.case-copy p + p { margin-top: var(--s3); }
+.process-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s6); margin: var(--s6) 0 0; padding: 0; list-style: none; }
+.process-node { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: var(--s4); border-radius: 50%; background: var(--project-ink); color: #fff; font: 700 var(--fs-body)/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.case-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s7); align-items: center; }
+.case-split.no-media { grid-template-columns: minmax(0, var(--measure)); }
+.case-media { display: grid; gap: var(--s5); min-width: 0; }
+.case-shot { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--r-media); background: var(--ivory); box-shadow: var(--shadow-1); }
+/* Projet suivant : la seule « carte » de la page (niveau 1). */
+.next-project { display: flex; align-items: center; gap: var(--s5); margin-top: var(--section-gap); padding: var(--s5); border-radius: var(--r-surface); background: var(--ivory); box-shadow: var(--shadow-1); color: inherit; text-decoration: none; }
+.next-project img { width: 72px; height: 72px; border-radius: 24%; object-fit: cover; }
+.next-text { display: flex; flex: 1; flex-direction: column; gap: var(--s1); min-width: 0; }
+.next-text > span { font: 700 var(--fs-label)/1.2 var(--font-body); color: var(--ink-soft); }
+.next-text strong { font: 700 var(--fs-h2)/1.1 var(--font-display); letter-spacing: -.03em; }
+.next-arrow { flex-shrink: 0; margin-right: var(--s2); color: var(--ink-soft); transition: transform .2s, color .2s; }
+.next-project:hover .next-arrow { transform: translateX(4px); color: var(--deep); }
+/* Sommaire : piste grise qui se remplit de la couleur du projet, curseur = icône du projet. */
+.case-rail { position: fixed; z-index: 2; left: 2.4%; top: 50%; transform: translateY(-50%); width: 11%; min-width: 120px; height: min(280px, 40vh); display: flex; --progress: 0; }
+.case-rail-track { position: relative; flex: 0 0 4px; margin-left: 14px; border-radius: 2px; background: color-mix(in srgb, var(--ink) 14%, transparent); }
+.case-rail-fill { position: absolute; left: 0; top: 0; width: 100%; height: calc(var(--progress) * 100%); border-radius: 2px; background: var(--project-tint); }
+.case-cursor { position: absolute; left: 50%; top: calc(var(--progress) * 100%); width: 30px; height: 30px; transform: translate(-50%, -50%); border-radius: 50%; overflow: hidden; background: var(--ivory); box-shadow: 0 0 0 3px var(--project-tint), var(--shadow-1); }
+.case-cursor img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.case-rail ol { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin: 0 0 0 22px; padding: 0; list-style: none; }
+.case-rail li { position: relative; height: 0; line-height: 1.15; }
+.case-rail a { position: absolute; inset: 0 0 auto; display: block; padding: var(--s1) 0; transform: translateY(-50%); font: 700 var(--fs-label)/1.2 var(--font-body); color: var(--ink-soft); text-decoration: none; transition: color .2s; }
+.case-rail a[aria-current] { color: var(--ink); }
+.case-rail a:hover { color: var(--deep); }
+/* Strip objects (project, projects and About) carry no visible labels; opacity 0, not display:none, keeps them readable by assistive tech. */
+.scene[data-view='project'] .object-label, .scene[data-view='projects'] .object-label, .scene[data-view='about'] .object-label { opacity: 0; transition: opacity .2s; }
+/* Sommaire des petits écrans : une rangée de puces d'ancres à glisser, sous le titre (le rail vertical n'existe que sur grand écran). */
+.case-chips-nav { display: none; }
+.case-chips-nav ol { display: flex; gap: var(--s2); margin: var(--s5) calc(var(--gutter) * -1) 0; padding: 0 var(--gutter); list-style: none; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: var(--gutter); }
+.case-chips-nav li { flex: none; scroll-snap-align: start; }
+.case-chips-nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s4); border-radius: var(--r-pill); background: color-mix(in srgb, var(--ink) 8%, var(--tile)); color: var(--ink); font: 700 var(--fs-label)/1.2 var(--font-body); text-decoration: none; white-space: nowrap; transition: background-color .2s, color .2s; }
+.case-chips-nav a[aria-current] { background: var(--project-ink); color: #fff; }
+@media (max-width: 1100px) {
+  .case-page { padding-left: var(--gutter); }
+  .case-rail { display: none; }
+  .case-chips-nav { display: block; }
+  .case-split { grid-template-columns: 1fr; gap: var(--s5); align-items: start; }
+  .case-split.no-media { grid-template-columns: 1fr; }
+}
+@media (max-width: 767px) {
+  .case-page { padding: 216px var(--gutter) var(--section-gap); }
+  .case-section { scroll-margin-top: 80px; }
+  .case-hero-frame { border-radius: var(--r-surface); }
+  .case-title { grid-template-columns: 1fr; margin-top: var(--s6); row-gap: var(--s4); }
+  .case-icon { width: 64px; height: 64px; }
+  .case-actions { grid-column: 1; margin-top: var(--s2); }
+  .case-actions a { flex: 1 1 auto; }
+  .case-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s5) var(--s4); padding: var(--s4); margin-top: var(--s6); }
+  .case-challenge { grid-template-columns: 1fr; gap: var(--s5); margin-top: var(--s6); }
+  .process-list { grid-template-columns: 1fr; gap: var(--s5); }
+  .process-list li { display: grid; grid-template-columns: 48px 1fr; column-gap: var(--s4); }
+  .process-node { grid-row: 1 / 3; margin: 0; }
+  .case-shot { border-radius: var(--r-surface); }
+  .next-project { gap: var(--s4); padding: var(--s4); }
+  .next-project img { width: 56px; height: 56px; }
+}

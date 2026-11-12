@@ -1,0 +1,72 @@
+/* Système de la page (design-direction §2). Un seul accent (--deep), six rôles de couleur.
+   Les couleurs sont enregistrées avec @property : changer de thème les interpole en 1,2 s,
+   exactement comme uNight dans le moteur (même durée, même courbe). */
+@property --tile { syntax: '<color>'; inherits: true; initial-value: #efedeb; }
+@property --grout { syntax: '<color>'; inherits: true; initial-value: #e2dcdc; }
+@property --ivory { syntax: '<color>'; inherits: true; initial-value: #f7f6f4; }
+@property --ink { syntax: '<color>'; inherits: true; initial-value: #11304a; }
+@property --ink-soft { syntax: '<color>'; inherits: true; initial-value: #4f6577; }
+@property --deep { syntax: '<color>'; inherits: true; initial-value: #0b5fa8; }
+@property --on-deep { syntax: '<color>'; inherits: true; initial-value: #ffffff; }
+@property --water { syntax: '<color>'; inherits: true; initial-value: #2a9fe8; }
+@property --light { syntax: '<color>'; inherits: true; initial-value: #7fd0ff; }
+
+:root {
+  color-scheme: light;
+  --night-duration: 1.2s;
+  --night-ease: cubic-bezier(.4, 0, .6, 1);
+  --tile: #efedeb;
+  --grout: #e2dcdc;
+  --ivory: #f7f6f4;
+  --ink: #11304a;
+  --ink-soft: #4f6577;
+  --deep: #0b5fa8;
+  --on-deep: #ffffff;
+  --water: #2a9fe8;
+  --light: #7fd0ff;
+  --shadow-1: 0 1px 2px #11304a0f, 0 12px 28px #11304a14;
+  --shadow-2: 0 24px 60px #11304a38;
+  --scrim: #11304a33;
+
+  /* Typographie : clamp() entre mobile (390 px) et ordinateur (1280 px). */
+  --font-display: 'Funnel Display', 'Noto Sans SC', system-ui, sans-serif;
+  --font-body: 'Zen Maru Gothic', 'Noto Sans SC', system-ui, sans-serif;
+  --fs-display: clamp(44px, calc(31.7px + 3.146vw), 72px);
+  --fs-h1: clamp(38px, calc(30.1px + 2.022vw), 56px);
+  --fs-h2: clamp(30px, calc(25.6px + 1.124vw), 40px);
+  --fs-h3: clamp(21px, calc(19.7px + .337vw), 24px);
+  --fs-body: clamp(18px, calc(17.56px + .112vw), 19px);
+  --fs-small: clamp(15px, calc(14.56px + .112vw), 16px);
+  --fs-label: 15px;
+  --measure: 62ch;
+  font-family: var(--font-body);
+
+  /* Espacement */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px; --s9: 88px;
+  --section-gap: clamp(60px, calc(34px + 7vw), 88px);
+  --gutter: clamp(16px, calc(6.29vw - 8.5px), 72px);
+
+  /* Arrondis */
+  --r-media: 24px; --r-surface: 18px; --r-inner: 12px; --r-pill: 999px;
+}
+html[data-theme='night'] {
+  color-scheme: dark;
+  --tile: #3e4045;
+  --grout: #36373c;
+  --ivory: #4a4c52;
+  --ink: #f2f5f7;
+  --ink-soft: #b9c3cb;
+  --deep: #8fd3ff;
+  --on-deep: #0e2233;
+  --water: #1e76ad;
+  --light: #9fe8ff;
+  --shadow-1: 0 1px 2px #0000004d, 0 12px 28px #00000059;
+  --shadow-2: 0 24px 60px #00000080;
+  --scrim: #00000066;
+}
+html {
+  transition: --tile var(--night-duration) var(--night-ease), --grout var(--night-duration) var(--night-ease), --ivory var(--night-duration) var(--night-ease),
+    --ink var(--night-duration) var(--night-ease), --ink-soft var(--night-duration) var(--night-ease), --deep var(--night-duration) var(--night-ease),
+    --on-deep var(--night-duration) var(--night-ease), --water var(--night-duration) var(--night-ease), --light var(--night-duration) var(--night-ease);
+}
+@media (prefers-reduced-motion: reduce) { html { transition: none; } }
